@@ -1,3 +1,5 @@
-dist/
+# Allow dist for wiwo release
+#dist/
+
 node_modules/
 lib/
