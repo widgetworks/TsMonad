@@ -137,3 +137,26 @@ interface MonadPlus<T> extends Monad<T> {
     mplus(t: Monad<T>): Monad<T>;
 }
 
+
+// Type for `flatten`
+export interface FMonad<T> extends Functor<T>, Monad<T>{}
+
+
+// The flatten functions allows you to turn an array of monads of T into
+// an monad of array of T.
+// Based on: https://github.com/hbel/tsmonads
+export function merge<T, U extends FMonad<T>>(l: U[], unit: <T>(t: T) => FMonad<T>): FMonad<T[]> {
+    if (!Array.isArray(l) || l.length === 0) {
+        return unit([]);
+    }
+    
+    const rec = (l_: U[], r: T[]): FMonad<T[]> => {
+        if (l_.length === 0) {
+            return unit(r);
+        }
+        return l_[0].bind((x) => rec(l_.slice(1), r.concat([x]))) as FMonad<T[]>;
+    };
+    const empty: T[] = [];
+    const ret = rec(l, empty);
+    return ret;
+}

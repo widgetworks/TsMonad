@@ -1,4 +1,4 @@
-import { Monad, Functor, Eq, eq } from './monad'
+import { Monad, Functor, Eq, eq, merge } from './monad'
 
 /**
  * @name EitherType
@@ -106,6 +106,46 @@ export class Either<L,R> implements Monad<R>, Functor<R>, Eq<Either<L,R>> {
     static right<L,R>(r: R) {
         return new Either<L,R>(EitherType.Right, null, r);
     }
+    
+    /**
+     * @name merge
+     * @description Helper function to merge a *list of Eithers* to an *Either of lists*.
+     * @methodOf Either#
+     * @static
+     * @param {Either<L, R>[]} eithers The list of eithers to convert
+     * @return {Either<L[],R[]>} Either object containing a list of Lefts or a list of Rights.
+     * @since 1.0.0-wiwo
+     */
+    static merge<L,R>(eithers: Either<L,R>[]): Either<L[],R[]> {
+        const empty = Either.right<L[], R[]>([]);
+        return eithers.reduce((res: Either<L[], R[]>, v: Either<L, R>) => {
+            const result = res.caseOf({
+                left: (resLeft) => {
+                    return v.caseOf({
+                        left: (vLeft) => {
+                            resLeft.push(vLeft);
+                            return Either.left<L[], R[]>(resLeft);
+                        },
+                        right: (): Either<L[], R[]> => {
+                            return res;
+                        },
+                    })
+                },
+                right: (resRight) => {
+                    return  v.caseOf({
+                        left: (vLeft) => {
+                            return Either.left<L[], R[]>([vLeft]);
+                        },
+                        right: (vRight) => {
+                            resRight.push(vRight);
+                            return Either.right<L[], R[]>(resRight);
+                        },
+                    });
+                },
+            });
+            return result;
+        }, empty);
+    }
 
     /**
      *
@@ -118,7 +158,8 @@ export class Either<L,R> implements Monad<R>, Functor<R>, Eq<Either<L,R>> {
      *     a left.
      */
     isLeft() {
-        return this.caseOf({left: () => true, right: () => false});
+        // return this.caseOf({left: () => true, right: () => false});
+        return this.type === EitherType.Left;
     }
 
     /**
@@ -132,7 +173,8 @@ export class Either<L,R> implements Monad<R>, Functor<R>, Eq<Either<L,R>> {
      *     a right.
      */
     isRight() {
-        return this.caseOf({left: () => false, right: () => true});
+        // return this.caseOf({left: () => false, right: () => true});
+        return this.type === EitherType.Right;
     }
 
     /**
@@ -158,7 +200,7 @@ export class Either<L,R> implements Monad<R>, Functor<R>, Eq<Either<L,R>> {
      *     an Either object.
      * @see Monad#bind
      */
-    bind<T>(f: (r: R) => Either<L,T>) {
+    bind<T>(f: (r: R) => Either<L,T>): Either<L,T> {
         return this.type === EitherType.Right ?
             f(this.r) :
             Either.left<L,T>(this.l);
@@ -194,7 +236,7 @@ export class Either<L,R> implements Monad<R>, Functor<R>, Eq<Either<L,R>> {
      *     an Either object.
      * @see Functor#fmap
      */
-    fmap<T>(f: (r: R) => T) {
+    fmap<T>(f: (r: R) => T): Either<L,T> {
         return this.bind(v => this.unit<T>(f(v)));
     }
 
@@ -217,6 +259,17 @@ export class Either<L,R> implements Monad<R>, Functor<R>, Eq<Either<L,R>> {
      * @see Functor#map
      */
     map = this.fmap;
+
+    /**
+     * @name mapLeft
+     * @description Apply the function to the Left side of the object.
+     * @methodOf Either#
+     * @since 1.0.0-wiwo
+     * @public
+     */
+    mapLeft<T>(f: (l: L) => T): Either<T,R> {
+        return this.isLeft() ? Either.left(f(this.l)) : Either.right<T,R>(this.r);
+    }
 
     /**
      * @name caseOf

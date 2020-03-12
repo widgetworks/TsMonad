@@ -204,5 +204,44 @@ describe('Maybe', () => {
         }));
 
     });
+    
+    describe('merge', () => {
+    	
+        it('flattens [Maybe<number>] to Maybe<number[]>', () => {
+        	const m = Maybe.merge([
+        	    Maybe.just(1),
+        	    Maybe.just(2),
+        	    Maybe.just(3),
+            ]);
+        	
+        	const sumM = m.lift((numList) => numList.reduce((sum, value) => sum + value, 0) );
+        	const result = sumM.caseOf({
+                nothing: () => -1,
+                just: (value) => value,
+            });
+        	
+        	assert.equal(result, 6);
+        	// assert.equal(result, null);
+        });
+    	
+        
+        it('flattens [Maybe<number>, Nothing<number>] to Nothing<number>', () => {
+        	const m = Maybe.merge([
+        	    Maybe.just<number>(1),
+        	    Maybe.just<number>(2),
+        	    Maybe.nothing<number>(),
+            ]);
+        	
+        	const sumM = m.lift((numList) => numList.reduce((sum, value) => sum + value, 0) );
+        	const result = sumM.caseOf({
+                nothing: () => -1,
+                just: (value) => value,
+            });
+        	
+        	assert.equal(result, -1);
+        	// assert.equal(result, null);
+        });
+        
+    });
 
 })

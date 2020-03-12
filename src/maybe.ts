@@ -1,4 +1,4 @@
-import { Monad, Functor, Eq, eq } from './monad'
+import { Monad, Functor, Eq, eq, merge } from './monad'
 
 /**
  * @name MaybeType
@@ -167,6 +167,20 @@ export class Maybe<T> implements Monad<T>, Functor<T>, Eq<Maybe<T>> {
     static isNothing<T>(t: Maybe<T>): boolean {
         return t.type === MaybeType.Nothing
     }
+    
+    
+    /**
+     * @name merge
+     * @description Helper function to convert a list of maybes `[Maybe<T>, ...]` to a maybe with a list `Maybe<T[]>`.
+     * @methodOf Maybe#
+     * @static
+     * @param {Maybe<T>[]} maybes The list of maybes to convert
+     * @return {Maybe<T[]>} Maybe object containing a list of values.
+     * @since 1.0.0-wiwo
+     */
+    static merge<T>(maybes: Maybe<T>[]): Maybe<T[]> {
+        return merge<T, Maybe<T>>(maybes, Maybe.maybe) as Maybe<T[]>;
+    }
 
 
     /**
@@ -192,7 +206,7 @@ export class Maybe<T> implements Monad<T>, Functor<T>, Eq<Maybe<T>> {
      *     a Maybe object.
      * @see Monad#bind
      */
-    bind<U>(f: (t: T) => Maybe<U>) {
+    bind<U>(f: (t: T) => Maybe<U>): Maybe<U> {
         return this.type === MaybeType.Just ?
             f(this.value) :
             Maybe.nothing<U>();
@@ -228,7 +242,7 @@ export class Maybe<T> implements Monad<T>, Functor<T>, Eq<Maybe<T>> {
      *     an Maybe object.
      * @see Functor#fmap
      */
-    fmap<U>(f: (t: T) => U) {
+    fmap<U>(f: (t: T) => U): Maybe<U> {
         return this.bind(v => this.unit<U>(f(v)));
     }
 
