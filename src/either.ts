@@ -272,6 +272,17 @@ export class Either<L,R> implements Monad<R>, Functor<R>, Eq<Either<L,R>> {
     }
 
     /**
+     * @name bimap
+     * @description Apply a function to the Left or right side and return new types from each.
+     * @methodOf Either#
+     * @since 1.1.0-wiwo
+     * @public
+     */
+    bimap<L2 = L, R2 = R>(fnL: (l: L) => L2, fnR: (r: R) => R2): Either<L2, R2> {
+        return this.isLeft() ? Either.left<L2, R2>(fnL(this.l)) : Either.right<L2,R2>(fnR(this.r));
+    }
+
+    /**
      * @name caseOf
      * @description Execute a function depending on the Either content.
      *     It allows to unwrap the object for Left or Right types.

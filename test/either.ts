@@ -193,5 +193,66 @@ describe('Either', () => {
         });
         
     });
+    
+    
+    //wiwo
+    describe('bimap', function(){
+        
+        it('maps over Right<T>', function(){
+        	
+            const m = Either.right<number, string>('good');
+            
+            let leftCalled = false;
+            let rightCalled = false;
+            const result = m.bimap<'left', 'right'>(
+                (l: number) => {
+                    leftCalled = true;
+                    return 'left';
+                },
+                (r: string) => {
+                    rightCalled = true;
+                    return 'right';
+                },
+            );
+            
+            assert.equal(leftCalled, false);
+            assert.equal(rightCalled, true);
+            assert.equal(result.equals(Either.right('right')), true);
+            
+            // assert.equal(leftCalled, null);
+            // assert.equal(rightCalled, null);
+            // assert.equal(result.equals(Either.right('right')), null);
+            
+        });
+        
+        
+        it('maps over Left<T>', function(){
+
+            const m = Either.left<number, string>(-1);
+            
+            let leftCalled = false;
+            let rightCalled = false;
+            const result = m.bimap<'left', 'right'>(
+                (l: number) => {
+                    leftCalled = true;
+                    return 'left';
+                },
+                (r: string) => {
+                    rightCalled = true;
+                    return 'right';
+                },
+            );
+            
+            assert.equal(leftCalled, true);
+            assert.equal(rightCalled, false);
+            assert.equal(result.equals(Either.left('left')), true);
+            
+            // assert.equal(leftCalled, null);
+            // assert.equal(rightCalled, null);
+            // assert.equal(result.equals(Either.left('left')), null);
+
+        });
+        
+    });
 
 })
