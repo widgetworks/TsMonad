@@ -1,7 +1,7 @@
 import * as _ from 'underscore'
 import * as assert from 'assert'
 
-import {Writer, writer} from '../src/writer'
+import {Writer, writer} from '../src/writer.js'
 
 describe('Writer', () => {
 

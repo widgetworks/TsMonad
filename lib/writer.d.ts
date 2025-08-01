@@ -1,4 +1,4 @@
-import { Monad, Eq } from './monad';
+import { Monad, Eq } from './monad.js';
 export interface WriterPatterns<S, T, U> {
     writer: (story: S[], value: T) => U;
 }

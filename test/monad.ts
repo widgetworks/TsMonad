@@ -1,7 +1,7 @@
-import {Either, either} from '../src/either'
-import {Maybe, maybe} from '../src/maybe'
-import {Writer, writer} from '../src/writer'
-import {Eq} from '../src/monad'
+import {Either, either} from '../src/either.js'
+import {Maybe, maybe} from '../src/maybe.js'
+import {Writer, writer} from '../src/writer.js'
+import {Eq} from '../src/monad.js'
 
 import * as assert from 'assert'
 import * as _ from 'underscore'

@@ -1,4 +1,4 @@
-import { Monad, Functor, Eq, eq, merge } from './monad'
+import { Monad, Functor, Eq, eq, merge } from './monad.js'
 
 /**
  * @name MaybeType

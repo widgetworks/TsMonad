@@ -1,4 +1,4 @@
-import { Monad, Functor, Eq, eq } from './monad'
+import { Monad, Functor, Eq, eq } from './monad.js'
 
 /**
  * @name WriterPatterns

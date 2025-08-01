@@ -1,4 +1,4 @@
-import {Maybe, Either, Writer} from '../src'
+import {Maybe, Either, Writer} from '../src/index.js'
 
 import * as assert from 'assert'
 

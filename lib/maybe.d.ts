@@ -1,4 +1,4 @@
-import { Monad, Functor, Eq } from './monad';
+import { Monad, Functor, Eq } from './monad.js';
 export declare enum MaybeType {
     Nothing = 0,
     Just = 1
@@ -7,7 +7,7 @@ export interface MaybePatterns<T, U> {
     just: (t: T) => U;
     nothing: () => U;
 }
-export declare type OptionalMaybePatterns<T, U> = Partial<MaybePatterns<T, U>>;
+export type OptionalMaybePatterns<T, U> = Partial<MaybePatterns<T, U>>;
 export declare function maybe<T>(t: T): Maybe<T>;
 export declare class Maybe<T> implements Monad<T>, Functor<T>, Eq<Maybe<T>> {
     private type;

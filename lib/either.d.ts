@@ -1,4 +1,4 @@
-import { Monad, Functor, Eq } from './monad';
+import { Monad, Functor, Eq } from './monad.js';
 export declare enum EitherType {
     Left = 0,
     Right = 1
@@ -7,7 +7,7 @@ export interface EitherPatterns<L, R, T> {
     left: (l: L) => T;
     right: (r: R) => T;
 }
-export declare type OptionalEitherPatterns<L, R, T> = Partial<EitherPatterns<L, R, T>>;
+export type OptionalEitherPatterns<L, R, T> = Partial<EitherPatterns<L, R, T>>;
 export declare function either<L, R>(l?: L, r?: R): Either<L, R>;
 export declare class Either<L, R> implements Monad<R>, Functor<R>, Eq<Either<L, R>> {
     private type;

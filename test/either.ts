@@ -1,4 +1,4 @@
-import {Either, either} from '../src/either'
+import {Either, either} from '../src/either.js'
 
 import * as assert from 'assert'
 

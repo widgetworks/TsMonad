@@ -1,4 +1,4 @@
-import {Maybe, maybe} from '../src/maybe'
+import {Maybe, maybe} from '../src/maybe.js'
 
 import * as assert from 'assert'
 
