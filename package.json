@@ -1,6 +1,6 @@
 {
   "name": "@wiwo/tsmonad",
-  "version": "3.0.0",
+  "version": "3.0.0-rc1",
   "private": true,
   "description": "TsMonad - fun-size monads library for TypeScript",
   "type": "module",
